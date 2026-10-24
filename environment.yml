@@ -1,0 +1,11 @@
+name: base
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - ultralytics
+    - opencv-python
+    # Add any other packages from your requirements.txt here
