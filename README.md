@@ -1,8 +1,3 @@
-![Python](https://img.shields.io/badge/Python-3.14+-blue.svg)
-![OpenCV](https://img.shields.io/badge/OpenCV-4.13+-green.svg)
-![YOLO](https://img.shields.io/badge/YOLOv8-8.4+-red.svg)
-![License](https://img.shields.io/badge/License-MIT-yellow.svg)
-
 **Pedestrian counting using YOLOv8 and OpenCV, with line-crossing detection and performance evaluation**
 
 # Metro Exit Counter 🚇
