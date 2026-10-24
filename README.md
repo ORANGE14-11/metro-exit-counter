@@ -3,7 +3,7 @@
 ![YOLO](https://img.shields.io/badge/YOLOv8-8.4+-red.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-**Real-time pedestrian counting system using YOLOv8 and OpenCV**
+**Pedestrian counting using YOLOv8 and OpenCV, with line-crossing detection and performance evaluation**
 
 [Features](#features) • [Installation](#installation) • [Usage](#usage) • [Demo](#demo) • [Applications](#applications)
 
