@@ -5,250 +5,119 @@
 
 **Pedestrian counting using YOLOv8 and OpenCV, with line-crossing detection and performance evaluation**
 
-[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Demo](#demo) • [Applications](#applications)
+# Metro Exit Counter 🚇
 
-</div>
+A computer-vision project that detects and tracks pedestrians and counts their crossings over a virtual line using YOLO and OpenCV.
 
----
+## Overview
 
-## 📋 Overview
+Metro Exit Counter explores how object detection and multi-object tracking can be used for pedestrian-flow monitoring.
 
-The **Metro Exit Counter** is a real-time computer vision system that detects and counts people as they cross a virtual line. Built with YOLOv8 and OpenCV, it achieves 30+ FPS on Mac M5 and can be used for metro stations, retail stores, crowd management, and security applications.
+The project uses a pretrained YOLO model to detect people and ByteTrack to maintain track IDs across video frames. A virtual line is used to count tracked people as they cross.
 
----
+## Features
 
-## ✨ Features
+- Pedestrian detection using YOLO
+- Object tracking using ByteTrack
+- Virtual line-crossing counter
+- Webcam and video-file input
+- Live count and approximate processing FPS
+- Keyboard controls to quit or reset
 
-| Feature | Description |
-|---------|-------------|
-| 🎯 **Real-time Detection** | Detects people instantly using YOLOv8 |
-| 📊 **Automatic Counting** | Counts each person crossing the virtual line |
-| 🟢 **Visual Feedback** | Green flash animation on every count |
-| 🎮 **Interactive Controls** | Reset counter, quit, or save screenshots |
-| 💻 **High Performance** | Optimized for Apple Silicon (M1/M2/M3/M5) |
-| 📸 **Screenshot Capture** | Save frames with 's' key |
+## Technology Stack
 
----
+- Python
+- Ultralytics YOLO
+- OpenCV
+- ByteTrack
 
-## 🖼️ Demo
-┌─────────────────────────────────────┐
-│ EXITS: 042 │
-│ │
-│ ┌─────┐ │
-│ │Person│ │
-│ └─────┘ │
-│ ━━━━━━━━━━━━━━━━━━━ │ ← Counting Line (RED)
-│ │
-│ Q=Quit | R=Reset | S=Screenshot │
-└─────────────────────────────────────┘
+## Installation
 
-text
+1. Clone this repository:
 
-*Actual demo video coming soon! Run the program to see it in action.*
+   ```bash
+   git clone https://github.com/ORANGE14-11/metro-exit-counter.git
+   cd metro-exit-counter
+   ```
 
----
+2. Create and activate a virtual environment:
 
-## 🚀 Installation
+   ```bash
+   python -m venv .venv
+   ```
 
-### Prerequisites
+   macOS/Linux:
 
-- Python 3.8 or higher
-- Git
-- Webcam (optional - works with video files too)
+   ```bash
+   source .venv/bin/activate
+   ```
 
-### Step 1: Clone the Repository
+   Windows PowerShell:
+
+   ```powershell
+   .venv\Scripts\Activate.ps1
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+## Usage
+
+Run the application:
 
 ```bash
-git clone https://github.com/ORANGE14-11/metro-exit-counter.git
-cd metro-exit-counter
-Step 2: Create Virtual Environment
+python main.py
+```
 
-bash
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Step 3: Install Dependencies
+The default input is webcam `0`. To process a local video instead, change `SOURCE` in `main.py` to the video filename, for example:
 
-bash
-pip install ultralytics opencv-python
-Step 4: Run the Application
+```python
+SOURCE = "test_video.mp4"
+```
 
-bash
-python3 metro_counter.py
-🎮 Usage Guide
+The YOLO model weights are downloaded automatically by Ultralytics if they are not available locally.
 
-Controls
+### Controls
 
-Key	Action
-q	Quit the program
-r	Reset counter to zero
-s	Save screenshot
-How to Use
+| Key | Action |
+|---|---|
+| `Q` | Quit |
+| `R` | Reset the count |
 
-Position your camera so the counting line is visible
-Walk from top to bottom crossing the red line
-Watch the counter increase with a green flash
-Press 'r' to reset and test again
-Press 'q' to exit
-Counting Logic
+## Counting Method
 
-text
-     TOP OF FRAME
-          │
-    ┌─────┴─────┐
-    │   Person  │ ← Detected
-    └─────┬─────┘
-          │
-    ══════▼══════  ← RED LINE (Counting Zone)
-          │
-    ┌─────▼─────┐
-    │  Counted! │ ← +1
-    └───────────┘
-     BOTTOM OF FRAME
-📁 Project Structure
+1. Detect people in each frame.
+2. Track detected people across frames.
+3. Calculate each bounding box's vertical center.
+4. Detect a crossing when the center moves from one side of the virtual line to the other.
+5. Count each tracked ID at most once until the counter is reset.
 
-text
-metro-exit-counter/
-│
-├── metro_counter.py      # Main application (125+ lines)
-├── README.md            # This file
-├── requirements.txt     # Dependencies
-├── .gitignore          # Git ignore rules
-│
-└── venv/               # Virtual environment (not tracked)
-🔧 Technical Details
+## Limitations
 
-Architecture
+- Tracking IDs may change when people are heavily occluded.
+- Dense crowds can lead to missed detections or incorrect counts.
+- A person who leaves and re-enters may receive a new ID.
+- Processing speed depends on the hardware, video resolution, and model configuration.
+- The current counter is a prototype and has not yet been validated against a labeled ground-truth dataset.
 
-python
-1. Capture frame from camera/video
-2. Run YOLOv8 detection (person class only)
-3. Draw bounding boxes and tracking points
-4. Check if person crosses virtual line
-5. Increment counter with visual feedback
-6. Display results in real-time
-Performance
+## Future Improvements
 
-Metric	Value
-FPS	30+ on Mac M5
-Model Size	6.2 MB (YOLOv8n)
-Detection Classes	Person only (class 0)
-Processing	Every 2nd frame
-Confidence Threshold	0.5
-Technologies Used
+- Evaluate counting accuracy on labeled pedestrian videos.
+- Compare different detection and tracking configurations.
+- Add precision, recall, and counting-error metrics where appropriate.
+- Test performance across different crowd densities and lighting conditions.
+- Add automated tests and reproducible experiment scripts.
 
-YOLOv8 - State-of-the-art object detection
-OpenCV - Video capture and image processing
-Python - Core programming language
-NumPy - Array operations
-🎯 Real-World Applications
+## Project Status
 
-Industry	Use Case
-🚇 Metro/Subway	Count passengers exiting stations
-🏪 Retail	Track foot traffic and peak hours
-🏢 Office Buildings	Monitor occupancy and flow
-🎪 Events	Count attendees at entrances/exits
-🔒 Security	Monitor restricted areas
-📊 Urban Planning	Gather pedestrian data
-🚧 Future Improvements
+This project is under development. Performance claims and evaluation results will be added after controlled testing.
 
-CSV Export - Save counting data with timestamps
-Dashboard - Streamlit web interface with charts
-Email Alerts - Notify when threshold reached
-Direction Detection - Count entry vs exit separately
-Multiple Lines - Count at different zones
-Mobile App - Run on iOS/Android devices
-Cloud Deployment - API endpoint for counting
-🤝 Contributing
+## Author
 
-Contributions are welcome! Feel free to:
+**Mita Nur**  
+Computer Science and Technology student, Zhejiang Normal University
 
-Fork the repository
-Create a feature branch (git checkout -b feature/AmazingFeature)
-Commit changes (git commit -m 'Add AmazingFeature')
-Push to branch (git push origin feature/AmazingFeature)
-Open a Pull Request
-📝 License
-
-This project is licensed under the MIT License - see below:
-
-text
-MIT License
-
-Copyright (c) 2026 ORANGE14-11
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction...
-👨‍💻 Author
-
-ORANGE14-11
-Computer Science Student @ ZJNU
-
-🔗 GitHub
-📧 [Your Email]
-🎓 ZJNU - Computer Science and Technology
-⭐ Show Your Support
-
-If this project helped you or inspired you:
-
-⭐ Star this repository on GitHub
-🐦 Share on social media
-🔗 Link to it in your portfolio
-🙏 Acknowledgments
-
-Ultralytics for YOLOv8
-OpenCV for computer vision tools
-My professors and peers at ZJNU for support
-<div align="center"> Made with 🚇 by ORANGE14-11 | ZJNU Computer Science </div> EOF ```
-Now add it to git:
-
-bash
-git add README.md
-git commit -m "Add professional README documentation"
-Create requirements.txt:
-
-bash
-cat > requirements.txt << 'EOF'
-ultralytics>=8.0.0
-opencv-python>=4.8.0
-numpy>=1.24.0
-EOF
-
-git add requirements.txt
-git commit -m "Add requirements.txt for easy installation"
-Create a simple .gitignore:
-
-bash
-cat > .gitignore << 'EOF'
-# Virtual environment
-venv/
-env/
-ENV/
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-
-# Model files (optional - can download)
-# yolov8n.pt
-
-# Screenshots
-*.png
-*.jpg
-
-# IDE files
-.vscode/
-.idea/
-
-# OS files
-.DS_Store
-Thumbs.db
-EOF
-
-git add .gitignore
-git commit -m "Add .gitignore for cleaner repo"
-Now push everything:
-
-bash
-git push -u origin main
+[GitHub Profile](https://github.com/ORANGE14-11)
